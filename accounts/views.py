@@ -233,3 +233,10 @@ def reset_password(request):
             messages.error(request, 'Passwords do not match!')
             return redirect('reset_password')
     return render(request, 'accounts/reset_password.html')
+
+
+@login_required(login_url='login')
+@user_passes_test(check_role_vendor)
+def get_vendor(request):
+    vendor = Vendor.objects.get(user=request.user)
+    return vendor
