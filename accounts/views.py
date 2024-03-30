@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render,  redirect
 from django.contrib import messages, auth
-
+import datetime
 from orders.models import Order
 from .forms import UserForm
 from .models import User, UserProfile
@@ -188,7 +188,29 @@ def vendorDashboard(request):
     #     'vendor': vendor,
     # }
     # return render(request, 'accounts/vendorDashboard.html', context=context) used context_processor
-    return render(request, 'accounts/vendorDashboard.html')
+    vendor = Vendor.objects.get(user=request.user)
+    orders = Order.objects.filter(vendors__in=[vendor.id], is_ordered=True).order_by('-created_at')
+    recent_orders = orders[:10]
+
+    # current month's revenue
+    current_month = datetime.datetime.now().month
+    current_months_orders = orders.filter(vendors__in=[vendor.id], created_at__month=current_month)
+    current_month_revenue = 0
+    for i in current_months_orders:
+        current_month_revenue += i.get_total_by_vendor()['grand_total']
+
+    # Total Revenue
+    total_revenue = 0
+    for i in orders:
+        total_revenue += i.get_total_by_vendor()['grand_total']
+    context = {
+        'orders': orders,
+        'orders_count': orders.count(),
+        'recent_orders': recent_orders,
+        'total_revenue': total_revenue,
+        'current_month_revenue': current_month_revenue,
+    }
+    return render(request, 'accounts/vendorDashboard.html', context=context)
 
 
 def forgot_password(request):
