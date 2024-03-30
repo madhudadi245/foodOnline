@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'menu',
     'marketplace',
     'customers',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,7 @@ TEMPLATES = [
                 'marketplace.context_processors.get_cart_counter',
                 'marketplace.context_processors.get_cart_amounts',
                 'accounts.context_processors.get_user_profile',
+                'accounts.context_processors.get_paypal_client_id',
             ],
         },
     },
@@ -180,3 +182,7 @@ DEFAULT_FROM_EMAIL='madhudadigames@gmail.com'
 
 
 GOOGLE_API_KEY = 'AIzaSyBcYYGc22G-Z0E8kensPdM7TwUfpXb1faI'
+
+PAYPAL_CLIENT_ID = 'AfHk8eikbSDfUXEQIB22YhN80SvbPHJnZ4v4K-yp8m5SxDogfuLDLgiEjothKyAavT5ypecu3W2J0LAj'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
