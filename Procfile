@@ -1,1 +1,1 @@
-web:gunicorn foodOnline_main.wsgi
+web: gunicorn foodOnline_main.wsgi
